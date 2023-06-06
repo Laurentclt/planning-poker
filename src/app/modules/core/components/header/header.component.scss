@@ -1,0 +1,16 @@
+@import "../../../../../assets/variables.scss";
+
+header {
+  height: 6vh;
+  background-color: $primaryColor;
+  color: $textLight;
+  padding: 2vh 5vw ;
+}
+nav {
+  width: 100%;
+}
+nav * {
+  background-color: $primaryColor;
+  color : $tertiaryColor;
+  border: solid 2px $tertiaryColor;
+}

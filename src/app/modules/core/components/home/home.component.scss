@@ -1,0 +1,12 @@
+@import "../../../../../assets/variables.scss";
+button {
+  background-color: $tertiaryColor;
+  border: solid 2px $quaternaryColor;
+  color : $textLight;
+  font-size: $text-md;
+}
+
+main {
+  height: $fit-page-height;
+}
+

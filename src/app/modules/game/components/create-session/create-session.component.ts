@@ -1,10 +1,16 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-create-session',
   templateUrl: './create-session.component.html',
   styleUrls: ['./create-session.component.scss']
 })
-export class CreateSessionComponent {
+export class CreateSessionComponent  implements OnInit{
 
+
+
+
+  ngOnInit() {
+
+  }
 }

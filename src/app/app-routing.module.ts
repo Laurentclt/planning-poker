@@ -8,8 +8,9 @@ import {RecordDetailComponent} from "./modules/records/components/record-detail/
 
 
 const routes: Routes = [
-  {path : "", component :HomeComponent},
-  {path : "create", component : CreateSessionComponent},
+  {path : "", pathMatch: "full",  redirectTo : "home"},
+  {path : "home", component : HomeComponent},
+  {path : "create-session", component : CreateSessionComponent},
   {path : "records", component : RecordListComponent},
   {path : "records/:id", component : RecordDetailComponent},
   {path : ":id", component : GameSessionComponent }
