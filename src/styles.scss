@@ -1,1 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+$primaryColor : blue;
+$secondaryColor : red;
+$tertiaryColor : yellow;
+$quaternaryColor : green;
+
+
+.flexC {
+  display: flex;
+  flex-direction: column;
+}
+.flexR {
+  display: flex;
+  flex-direction: row;
+}
+.centered {
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  align-self: center;
+}
