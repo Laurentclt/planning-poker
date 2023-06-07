@@ -13,6 +13,10 @@ import { RecordDetailComponent } from './modules/records/components/record-detai
 import {FormsModule} from "@angular/forms";
 import { CardComponent } from './modules/shared/components/card/card.component';
 import { PlayerCardComponent } from './modules/game/components/game-session/components/player-card/player-card.component';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,10 @@ import { PlayerCardComponent } from './modules/game/components/game-session/comp
     imports: [
         BrowserModule,
         AppRoutingModule,
-        FormsModule
+        FormsModule,
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        provideFirestore(() => getFirestore())
     ],
   providers: [],
   bootstrap: [AppComponent]
