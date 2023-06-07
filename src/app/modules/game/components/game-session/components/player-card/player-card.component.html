@@ -4,8 +4,13 @@
   <div class="flexR centered">
     <!--display pseudo for card on the left-->
     <p *ngIf="context == 'left'">{{player.pseudo}}</p>
-    <div class="card flexR centered" [ngClass]="{'face-down' : player.card.ishidden}">
-      <span *ngIf="!player.card.ishidden">{{player.card.value}}</span>
+    <div class="card flexR centered" [ngClass]="{
+    'face-down-no-value' : player.card.ishidden && player.card.value <= 0,
+    'face-down-with-value' : player.card.ishidden && player.card.value > 0,
+    'face-up-with-value' : !player.card.ishidden && player.card.value > 0,
+    'face-up-no-value' : !player.card.ishidden && player.card.value <= 0,
+    }">
+      <span *ngIf="!player.card.ishidden && player.card.value > 0">{{player.card.value}}</span>
     </div>
     <!--display pseudo for card on the right-->
     <p *ngIf="context == 'right'">{{player.pseudo}}</p>

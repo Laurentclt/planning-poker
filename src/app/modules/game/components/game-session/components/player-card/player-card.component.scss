@@ -16,6 +16,17 @@
   color: $quaternaryColor;
 }
 
-.face-down {
+.face-down-no-value {
+  background-color: $secondaryColor;
+}
+
+.face-down-with-value {
   background-color: $tertiaryColor;
+}
+.face-up-no-value {
+  background-color: $primaryColor;
+}
+
+.face-up-with-value {
+  background-color: $primaryColor;
 }

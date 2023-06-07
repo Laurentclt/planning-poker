@@ -11,10 +11,16 @@
   border: solid 3px $quinaryColor;
 }
 .top, .bottom {
-  width: 100%;
+  width: 60vw;
 }
 .right, .left {
   height: 100%;
+}
+.right {
+  align-items: flex-start;
+}
+.left {
+  align-items: flex-end;
 }
 .message {
   color: $quaternaryColor;
