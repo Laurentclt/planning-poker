@@ -25,4 +25,5 @@ export class HeaderComponent implements DoCheck{
     return this.router.navigateByUrl(RoutesPathEnum.CreateSession);
   }
 
+  protected readonly RoutesPathEnum = RoutesPathEnum;
 }

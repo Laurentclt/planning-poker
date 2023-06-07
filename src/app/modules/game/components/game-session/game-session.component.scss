@@ -1,0 +1,23 @@
+@import "../../../../../assets/variables";
+.cards-picker {
+  width: 80vw;
+}
+
+.table {
+  width: 60vw !important;
+  height: 30vh !important;
+  background-color: $primaryColor;
+  border-radius: 11px ;
+  border: solid 3px $quinaryColor;
+}
+.top, .bottom {
+  width: 100%;
+}
+.right, .left {
+  height: 100%;
+}
+.message {
+  color: $quaternaryColor;
+  font-weight: bold;
+  font-size: $text-lg;
+}

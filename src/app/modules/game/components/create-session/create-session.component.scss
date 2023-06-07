@@ -1,0 +1,34 @@
+@import "../../../../../assets/variables.scss";
+h1 {
+  color: $quaternaryColor;
+}
+.modal {
+  padding: 10%;
+  border: solid 5px $quaternaryColor;
+  border-radius: 11px;
+  gap: 50px;
+}
+.form-input {
+  gap: 10px;
+}
+.form-input *  {
+  padding: 10px;
+  border-radius: 11px;
+  border: solid 2px $quaternaryColor;
+  font-size: $text-md;
+}
+option, select {
+  color: $quaternaryColor;
+}
+
+.modal *:focus {
+  border-color: $tertiaryColor;
+  outline: none;
+}
+#submit {
+  border-color: $tertiaryColor;
+  color: $tertiaryColor;
+}
+#submit:hover {
+  box-shadow: 2px 2px 2px $tertiaryColor;
+}

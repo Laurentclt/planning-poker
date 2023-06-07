@@ -1,0 +1,21 @@
+@import "../../../../../../../assets/variables.scss";
+
+.card {
+  cursor: pointer;
+  background-color: $primaryColor;
+  border: solid 2px $quaternaryColor;
+  border-radius: 11px;
+  min-width: 25px ;
+  min-height: 60px;
+  margin: 10px 20px;
+
+}
+.card span {
+  font-size: $text-lg;
+  font-weight: bold;
+  color: $quaternaryColor;
+}
+
+.face-down {
+  background-color: $tertiaryColor;
+}

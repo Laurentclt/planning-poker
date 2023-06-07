@@ -1,8 +1,8 @@
 @import "../../../../../assets/variables.scss";
 button {
-  background-color: $tertiaryColor;
+  background-color: $primaryColor;
   border: solid 2px $quaternaryColor;
-  color : $textLight;
+  color : $textDark;
   font-size: $text-md;
 }
 

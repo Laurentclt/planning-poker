@@ -7,11 +7,16 @@ body {
   min-width: 400px;
 }
 .btn {
-  padding: 20px;
+  padding: 15px;
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
   font-size: $text-lg;
+  background-color: $primaryColor;
+}
+.btn:hover {
+  background-color: transparent;
+  box-shadow: 2px 2px 2px $quinaryColor;
 }
 
 .flexC {
@@ -34,5 +39,12 @@ body {
 }
 .spaceA {
   justify-content: space-around;
+}
+.wrapped {
+  flex-wrap: wrap;
+}
+
+.fitWithHeader {
+  height: $fit-page-height;
 }
 

@@ -10,6 +10,9 @@ import { GameSessionComponent } from './modules/game/components/game-session/gam
 import { RecordListComponent } from './modules/records/components/record-list/record-list.component';
 import { RecordComponent } from './modules/records/components/record/record.component';
 import { RecordDetailComponent } from './modules/records/components/record-detail/record-detail.component';
+import {FormsModule} from "@angular/forms";
+import { CardComponent } from './modules/shared/components/card/card.component';
+import { PlayerCardComponent } from './modules/game/components/game-session/components/player-card/player-card.component';
 
 @NgModule({
   declarations: [
@@ -20,12 +23,15 @@ import { RecordDetailComponent } from './modules/records/components/record-detai
     GameSessionComponent,
     RecordListComponent,
     RecordComponent,
-    RecordDetailComponent
+    RecordDetailComponent,
+    CardComponent,
+    PlayerCardComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

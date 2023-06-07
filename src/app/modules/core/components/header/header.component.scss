@@ -2,15 +2,15 @@
 
 header {
   height: 6vh;
-  background-color: $primaryColor;
+  background-color: white;
   color: $textLight;
-  padding: 2vh 5vw ;
+  padding: 1.75vh 5vw ;
+  border-bottom: solid 0.5vh $quaternaryColor;
 }
 nav {
   width: 100%;
 }
 nav * {
-  background-color: $primaryColor;
-  color : $tertiaryColor;
-  border: solid 2px $tertiaryColor;
+  color : $quaternaryColor;
+  border: solid 2px $quaternaryColor;
 }

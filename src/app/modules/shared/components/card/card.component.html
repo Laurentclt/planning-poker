@@ -1,0 +1,3 @@
+<div class="card flexC centered" [ngClass]="{'face-down' : card.ishidden}">
+  <span *ngIf="!card.ishidden">{{card.value}}</span>
+</div>

@@ -1,1 +1,16 @@
-<p>create-session works!</p>
+<main class="flexC centered fitWithHeader">
+  <h1>Create game session</h1>
+    <form #sessionForm="ngForm" (ngSubmit)="onSubmitForm(sessionForm)" class="modal flexC ">
+      <div class="form-input flexC ">
+        <input type="text" id="session-name" placeholder="session's name" name="sessionName" ngModel>
+        <select name="votingSystem" [(ngModel)]="defaultOption.value">
+          <option #defaultOption >Classic ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ? ) </option>
+          <option>Fibonacci ( 0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, ? ) </option>
+          <option>Byte ( 1, 2, 4, 8, 16, 32, 64, 128, ? ) </option>
+        </select>
+      </div>
+      <button type="submit" class="btn" id="submit">Create session</button>
+    </form>
+
+
+</main>
