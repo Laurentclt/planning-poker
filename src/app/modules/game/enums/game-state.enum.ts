@@ -1,5 +1,5 @@
 export enum GameState {
-  Creating,
-  Running,
-  Over
+  Created = "Created",
+  Running = "Running",
+  Over = "Over"
 }
