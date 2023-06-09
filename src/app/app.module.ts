@@ -1,5 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {FormsModule} from "@angular/forms";
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,13 +15,9 @@ import { GameSessionComponent } from './modules/game/components/game-session/gam
 import { RecordListComponent } from './modules/records/components/record-list/record-list.component';
 import { RecordComponent } from './modules/records/components/record/record.component';
 import { RecordDetailComponent } from './modules/records/components/record-detail/record-detail.component';
-import {FormsModule} from "@angular/forms";
 import { CardComponent } from './modules/shared/components/card/card.component';
 import { PlayerCardComponent } from './modules/game/components/game-session/components/player-card/player-card.component';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
-import { environment } from '../environments/environment';
-import { provideAuth,getAuth } from '@angular/fire/auth';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
     RecordComponent,
     RecordDetailComponent,
     CardComponent,
-    PlayerCardComponent
+    PlayerCardComponent,
   ],
     imports: [
         BrowserModule,
