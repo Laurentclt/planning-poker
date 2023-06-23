@@ -9,8 +9,6 @@ import {VotingSystem} from "../../models/voting-system.model";
 import {Observable} from "rxjs";
 
 
-
-
 @Component({
   selector: 'app-create-session',
   templateUrl: './create-session.component.html',
@@ -27,8 +25,8 @@ export class CreateSessionComponent implements OnInit{
   }
   onSubmitForm(form: NgForm): Promise<boolean> {
     console.log(form.value)
-    const session = new Session(form.value.sessionName, Date.now(), form.value.votingSystem, [], GameState.Created);
-    return this.createSession(session).then(() => this.goToSessionCreated())
+    const session = new Session(form.value.sessionName, Date.now(), form.value.votingSystem, GameState.Created);
+    return this.createSession(session).then(() => this.goToCreatedSession())
   }
   async createSession(session: Session): Promise<void> {
     await this.dbService.createSession(session).then(data => {
@@ -38,7 +36,7 @@ export class CreateSessionComponent implements OnInit{
 
   }
 
-  goToSessionCreated(): Promise<boolean> {
+  goToCreatedSession(): Promise<boolean> {
     return this.router.navigateByUrl(`/${this.session.id}`)
   }
 
