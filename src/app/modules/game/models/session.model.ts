@@ -4,7 +4,7 @@ import {VotingSystem} from "./voting-system.model";
 import {Player} from "../../players/models/player.model";
 
 export class Session {
-  id: string;
+  id?: string;
   sessionName: string;
   sessionStart: number;
   sessionEnd?: number;
@@ -14,8 +14,7 @@ export class Session {
   creator?: Player;
 
 
-  constructor(id: string, sessionName: string, sessionStart: number, votingSystem: VotingSystem, state: GameState) {
-    this.id = id;
+  constructor(sessionName: string, sessionStart: number, votingSystem: VotingSystem, state: GameState) {
     this.sessionName = sessionName;
     this.sessionStart = sessionStart;
     this.votingSystem = votingSystem;

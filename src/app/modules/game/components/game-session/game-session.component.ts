@@ -4,28 +4,29 @@ import {GameService} from "../../services/game.service";
 import {Player} from "../../../players/models/player.model";
 import {RoundState} from "../../enums/round-state.enum";
 import {DatabaseService} from "../../../core/services/database.service";
+import {StateService} from "../../../core/services/state.service";
 
 @Component({
-  selector: 'app-game-session',
-  templateUrl: './game-session.component.html',
-  styleUrls: ['./game-session.component.scss']
+    selector: 'app-game-session',
+    templateUrl: './game-session.component.html',
+    styleUrls: ['./game-session.component.scss']
 })
-export class GameSessionComponent implements OnInit{
-  cards! : Card[];
-  players! : Player[];
-  players3! : Player[];
-  message! : string;
-  roundState! : RoundState;
-  constructor(private databaseService : DatabaseService, private gameService : GameService) {
-  }
+export class GameSessionComponent implements OnInit {
+    cards!: Card[];
+    players!: Player[];
+    players3!: Player[];
+    message!: string;
+    roundState!: RoundState;
 
-  ngOnInit(): void {
-    this.roundState = RoundState.UserDidNotVote;
-    this.cards = this.databaseService.getPlayingCards();
-    this.players = this.gameService.getPlayers();
-    this.players3 = this.players.slice(-3);
-  }
+    constructor(private databaseService: DatabaseService, private gameService: GameService, private stateService: StateService) {
+    }
 
+    ngOnInit(): void {
+        this.roundState = RoundState.UserDidNotVote;
+        this.cards = this.databaseService.getPlayingCards();
+        this.players = this.gameService.getPlayers();
+        this.players3 = this.players.slice(-3);
+    }
 
     protected readonly RoundState = RoundState;
 }

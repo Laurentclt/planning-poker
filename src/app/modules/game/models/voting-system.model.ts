@@ -2,12 +2,10 @@ import {Card} from "../../shared/models/card.model";
 
 
 export class VotingSystem {
-    id: string;
     name: string;
     cards: Card[];
 
-    constructor(id: string, name: string, cards: Card[]) {
-        this.id = id;
+    constructor(name: string, cards: Card[]) {
         this.name = name;
         this.cards = cards;
     }

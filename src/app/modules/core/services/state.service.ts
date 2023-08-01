@@ -8,12 +8,12 @@ import {RoundState} from "../../game/enums/round-state.enum";
     providedIn: 'root'
 })
 export class StateService {
-    session? : Session;
-    players : Player[] = [];
-    url? : string;
-    gameState? : GameState;
-    playerConnected? : Player;
-    roundState? : RoundState
+    session?: Session;
+    players: Player[] = [];
+    url?: string;
+    gameState?: GameState;
+    playerConnected?: Player;
+    roundState?: RoundState
 
     constructor() {
     }

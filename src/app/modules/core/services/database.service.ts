@@ -12,7 +12,6 @@ import {StateService} from "./state.service";
 })
 export class DatabaseService {
     firestore: Firestore = inject(Firestore);
-    session! : Session;
     constructor(private stateService : StateService) {
     }
 
@@ -22,19 +21,17 @@ export class DatabaseService {
     }
 
     async createSession(session: Session) {
-        let createdSession = await addDoc(collection(this.firestore, "sessions"), {...session});
-        this.stateService.session = new Session(createdSession.id, session.sessionName, session.sessionStart, session.votingSystem, session.state)
-        return createdSession
+        return await addDoc(collection(this.firestore, "sessions"), {...session});
     }
 
     getVotingSystems$() {
         return collectionData( collection(this.firestore, "votingSystems")) as Observable<VotingSystem[]>
     }
     getPlayingCards() : Card[] {
-        if (!this.session) {
+        if (!this.stateService.session) {
             throw new Error("can't get cards from null session")
         } else {
-            return this.session.votingSystem.cards
+            return this.stateService.session.votingSystem.cards
         }
 
     }
