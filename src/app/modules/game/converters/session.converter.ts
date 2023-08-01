@@ -16,6 +16,6 @@ export class sessionConverter implements FirestoreDataConverter<Session>  {
 
   fromFirestore(snapshot: QueryDocumentSnapshot<any>, options: SnapshotOptions) : Session {
     const data = snapshot.data(options);
-    return new Session( data.name, data.start, data.votingSystem, data.state)
+    return new Session( data.name, data.start, data.votingSystem, data.votingSystem, data.start)
   }
 }

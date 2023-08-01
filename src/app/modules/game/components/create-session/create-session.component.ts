@@ -25,7 +25,7 @@ export class CreateSessionComponent implements OnInit{
   }
   onSubmitForm(form: NgForm): Promise<boolean> {
     console.log(form.value)
-    const session = new Session(form.value.sessionName, Date.now(), form.value.votingSystem, GameState.Created);
+    const session = new Session("1",form.value.sessionName, Date.now(), form.value.votingSystem, GameState.Created);
     return this.createSession(session).then(() => this.goToCreatedSession())
   }
   async createSession(session: Session): Promise<void> {
