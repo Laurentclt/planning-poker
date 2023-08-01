@@ -1,22 +1,22 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CardService {
 
-  constructor() { }
+    constructor() {
+    }
+    showAllCards(): void {
+        // used when display results => show all users' card
+    }
 
-  showAllCards() : void {
-    // used when display results => show all users' card
-  }
+    selectCard(): void {
+        // used when player select a card => change player's card value in db
+    }
 
-  selectCard() : void {
-    // used when player select a card => change player's card value in db
-  }
-
-  hideAllCards() : void {
-    // used when a new round begin => hide all users card
-  }
+    hideAllCards(): void {
+        // used when a new round begin => hide all users card
+    }
 
 }

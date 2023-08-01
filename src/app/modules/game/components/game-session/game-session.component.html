@@ -12,7 +12,7 @@
       </div>
       <div class="table flexC centered">
           <p class="message">{{message}}</p>
-        <button *ngIf="tableState != TableState.UserDidNotVote"></button>
+        <button *ngIf="roundState != RoundState.UserDidNotVote"></button>
       </div>
       <div class="right flexC spaceA">
         <app-player-card *ngFor="let player of players3" [player]="player " context="right" ></app-player-card>

@@ -1,8 +1,10 @@
-<header >
-  <div class="flexR centered container">
-    <nav class="flexR spaceB">
-      <div (click)="goToHomePage()" class="btn">Home</div>
-      <div *ngIf="currentPath === '/'+ RoutesPathEnum.Home" (click)="goToCreateSessionPage()" class="btn" >Start new game</div>
-    </nav>
-  </div>
+<header>
+    <div class="flexR centered container">
+        <nav class="flexR spaceB">
+            <div (click)="goToHomePage()" class="btn">Home</div>
+            <div *ngIf="stateService.url === '/home'" (click)="goToCreateSessionPage()" class="btn">Start
+                new game
+            </div>
+        </nav>
+    </div>
 </header>

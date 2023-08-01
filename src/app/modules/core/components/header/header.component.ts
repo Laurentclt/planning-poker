@@ -1,29 +1,24 @@
-import { Component, DoCheck} from '@angular/core';
-import { Router} from "@angular/router";
+import {Component, DoCheck} from '@angular/core';
+import {Router} from "@angular/router";
 import {RoutesPathEnum} from "../../enums/routes-path.enum";
+import {StateService} from "../../services/state.service";
 
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements DoCheck{
-  currentPath! : string;
-  constructor(private router : Router) {
-  }
-  ngDoCheck() {
-    this.currentPath = this.router.url;
-    console.log("do check :", this.currentPath)
-  }
+export class HeaderComponent {
 
-  goToHomePage() : Promise<boolean> {
-     return this.router.navigateByUrl(RoutesPathEnum.Home);
-  }
+    constructor(private router: Router, public stateService : StateService) {
+    }
 
-  goToCreateSessionPage() : Promise<boolean> {
-    return this.router.navigateByUrl(RoutesPathEnum.CreateSession);
-  }
+    goToHomePage(): Promise<boolean> {
+        return this.router.navigateByUrl(RoutesPathEnum.Home);
+    }
 
-  protected readonly RoutesPathEnum = RoutesPathEnum;
+    goToCreateSessionPage(): Promise<boolean> {
+        return this.router.navigateByUrl(RoutesPathEnum.CreateSession);
+    }
 }

@@ -1,4 +1,4 @@
-export enum TableState {
+export enum RoundState {
   UserDidNotVote,
   UserDidVote,
   AllUsersDidVote,

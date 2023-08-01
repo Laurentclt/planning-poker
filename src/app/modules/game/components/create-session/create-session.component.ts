@@ -6,6 +6,7 @@ import {GameState} from "../../enums/game-state.enum";
 import {DatabaseService} from "../../../core/services/database.service";
 import {DocumentReference} from "@angular/fire/firestore";
 import {VotingSystem} from "../../models/voting-system.model";
+import {StateService} from "../../../core/services/state.service";
 
 
 @Component({
@@ -16,11 +17,12 @@ import {VotingSystem} from "../../models/voting-system.model";
 export class CreateSessionComponent implements OnInit{
   session!: DocumentReference;
   votingSystems : VotingSystem[] = [];
-  constructor(private router: Router, private dbService: DatabaseService) {
+  constructor(private router: Router, private dbService: DatabaseService, public stateService : StateService) {
   }
 
   ngOnInit() {
       this.getVotingSystems();
+      this.stateService.url = this.router.url
   }
   onSubmitForm(form: NgForm): Promise<boolean> {
     console.log(form.value)

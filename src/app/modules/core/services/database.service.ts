@@ -1,36 +1,41 @@
 import {inject, Injectable} from '@angular/core';
-import {addDoc, collection, collectionData, Firestore, getDocs} from "@angular/fire/firestore";
+import {addDoc, collection, collectionData, Firestore} from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 import {Session} from "../../game/models/session.model";
 import {VotingSystem} from "../../game/models/voting-system.model";
+import {Card} from "../../shared/models/card.model";
+import {StateService} from "./state.service";
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class DatabaseService {
-  firestore : Firestore = inject(Firestore);
-  sessions$ : Observable<Session[]>;
-  votingSystems$ : Observable<VotingSystem[]>
-  sessionCollection = collection(this.firestore, "sessions")
-  votingSystemCollection = collection(this.firestore, "votingSystems")
-  constructor() {
-    this.sessions$ = collectionData(this.sessionCollection) as Observable<Session[]>
-    this.votingSystems$ = collectionData(this.votingSystemCollection )as Observable<VotingSystem[]>
-  }
+    firestore: Firestore = inject(Firestore);
+    session! : Session;
+    constructor(private stateService : StateService) {
+    }
 
 
+    getInstanceDb() {
+        return this.firestore
+    }
 
-  getInstanceDb() {
-    return this.firestore
-  }
+    async createSession(session: Session) {
+        let createdSession = await addDoc(collection(this.firestore, "sessions"), {...session});
+        this.stateService.session = new Session(createdSession.id, session.sessionName, session.sessionStart, session.votingSystem, session.state)
+        return createdSession
+    }
 
-  async createSession(session : Session) {
-    return await addDoc(this.sessionCollection, {...session});
-  }
+    getVotingSystems$() {
+        return collectionData( collection(this.firestore, "votingSystems")) as Observable<VotingSystem[]>
+    }
+    getPlayingCards() : Card[] {
+        if (!this.session) {
+            throw new Error("can't get cards from null session")
+        } else {
+            return this.session.votingSystem.cards
+        }
 
-  getVotingSystems$() {
-    return this.votingSystems$
-  }
-
+    }
 }
