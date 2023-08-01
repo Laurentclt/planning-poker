@@ -6,7 +6,6 @@ import {GameState} from "../../enums/game-state.enum";
 import {DatabaseService} from "../../../core/services/database.service";
 import {DocumentReference} from "@angular/fire/firestore";
 import {VotingSystem} from "../../models/voting-system.model";
-import {Observable} from "rxjs";
 
 
 @Component({
@@ -16,12 +15,12 @@ import {Observable} from "rxjs";
 })
 export class CreateSessionComponent implements OnInit{
   session!: DocumentReference;
-  votingSystems$! : Observable<VotingSystem[]>;
+  votingSystems : VotingSystem[] = [];
   constructor(private router: Router, private dbService: DatabaseService) {
   }
 
   ngOnInit() {
-    this.votingSystems$ = this.getVotingSystems$();
+      this.getVotingSystems();
   }
   onSubmitForm(form: NgForm): Promise<boolean> {
     console.log(form.value)
@@ -40,8 +39,14 @@ export class CreateSessionComponent implements OnInit{
     return this.router.navigateByUrl(`/${this.session.id}`)
   }
 
-  getVotingSystems$() : Observable<VotingSystem[]> {
-    return this.dbService.getVotingSystems$()
+  getVotingSystems() : void {
+    this.dbService.getVotingSystems$().subscribe(value => {
+        value.forEach(system => {
+            let newSystem = new VotingSystem(system.id, system.name,system.cards)
+            this.votingSystems.push(newSystem);
+
+        })
+    })
   }
 
 }

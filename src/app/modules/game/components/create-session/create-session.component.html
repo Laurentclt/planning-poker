@@ -4,7 +4,7 @@
       <div class="form-input flexC ">
         <input type="text" id="session-name" placeholder="session's name" name="sessionName" ngModel>
         <select name="votingSystem" ngModel>
-          <option  *ngFor="let system of votingSystems$ | async" [defaultSelected]="system.name == 'Classic'">{{system.name}} ( {{system.cards}} )</option>
+          <option  *ngFor="let system of votingSystems" >{{system.getFullName()}}</option>
         </select>
       </div>
       <button type="submit" class="btn" id="submit">Create session</button>
