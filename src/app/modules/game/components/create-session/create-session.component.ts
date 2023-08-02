@@ -15,7 +15,7 @@ import {StateService} from "../../../core/services/state.service";
 })
 export class CreateSessionComponent implements OnInit {
     votingSystems: VotingSystem[] = [];
-
+    defaultSelectedSystem! : VotingSystem;
     constructor(private router: Router, private dbService: DatabaseService, public stateService: StateService) {
     }
 
@@ -58,8 +58,9 @@ export class CreateSessionComponent implements OnInit {
             value.forEach(system => {
                 let newSystem = new VotingSystem(system.name, system.cards)
                 this.votingSystems.push(newSystem);
-
             })
+            this.defaultSelectedSystem = this.votingSystems.filter(system => system.name =="classic")[0]
+            console.log(this.defaultSelectedSystem)
         })
     }
 
