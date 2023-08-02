@@ -5,12 +5,12 @@
     <!--display pseudo for card on the left-->
     <p *ngIf="context == 'left'">{{player.pseudo}}</p>
     <div class="card flexR centered" [ngClass]="{
-    'face-down-no-value' : player.card.isHidden && player.card.value <= 0,
-    'face-down-with-value' : player.card.isHidden && player.card.value > 0,
-    'face-up-with-value' : !player.card.isHidden && player.card.value > 0,
-    'face-up-no-value' : !player.card.isHidden && player.card.value <= 0,
+    'face-down-no-value' : player.card.isHidden && player.card.value == undefined,
+    'face-down-with-value' : player.card.isHidden && player.card.value != undefined,
+    'face-up-with-value' : !player.card.isHidden && player.card.value != undefined,
+    'face-up-no-value' : !player.card.isHidden && player.card.value == undefined,
     }">
-      <span *ngIf="!player.card.isHidden && player.card.value > 0">{{player.card.value}}</span>
+      <span *ngIf="!player.card.isHidden && player.card.value != undefined">{{player.card.value}}</span>
     </div>
     <!--display pseudo for card on the right-->
     <p *ngIf="context == 'right'">{{player.pseudo}}</p>

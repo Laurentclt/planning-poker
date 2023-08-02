@@ -6,6 +6,7 @@ import {RoundState} from "../../enums/round-state.enum";
 import {DatabaseService} from "../../../core/services/database.service";
 import {StateService} from "../../../core/services/state.service";
 import {Router} from "@angular/router";
+import {Modal} from "../../../shared/models/modal.model";
 
 @Component({
     selector: 'app-game-session',
@@ -18,8 +19,13 @@ export class GameSessionComponent implements OnInit {
     players3!: Player[];
     message!: string;
     roundState!: RoundState;
+    modal: Modal = {
+        title : "Enter your gaming name",
+        fields: ["name"],
+        successBtn: "Save",
+    } ;
     protected readonly RoundState = RoundState;
-    constructor(private router : Router, private databaseService: DatabaseService, private gameService: GameService, private stateService: StateService) {
+    constructor(private router : Router, private databaseService: DatabaseService, private gameService: GameService, public stateService: StateService) {
     }
 
     ngOnInit(): void {
@@ -37,4 +43,10 @@ export class GameSessionComponent implements OnInit {
     }
 
 
+    getModalData(event : Event) {
+        console.log(event)
+        let player = new Player(event.type)
+        this.databaseService.addPlayer(player).then(r => this.stateService.playerConnected = player)
+
+    }
 }

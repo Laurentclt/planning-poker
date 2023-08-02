@@ -2,17 +2,17 @@ import {Card} from "../../shared/models/card.model";
 import {Session} from "../../game/models/session.model";
 
 export class Player {
-
-  id : string;
-  pseudo : string;
-  card: Card;
-  sessions : Session[];
+    pseudo: string;
+    card: Card;
+    sessions: Session[];
 
 
-  constructor(id: string, pseudo: string, card : Card) {
-    this.id = id;
-    this.pseudo = pseudo;
-    this.card = card;
-    this.sessions = [];
-  }
+    constructor(pseudo: string) {
+        this.pseudo = pseudo;
+        this.sessions = [];
+        this.card = {
+            value : undefined,
+            isHidden : false
+        }
+    }
 }

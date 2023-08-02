@@ -60,7 +60,6 @@ export class CreateSessionComponent implements OnInit {
                 this.votingSystems.push(newSystem);
             })
             this.defaultSelectedSystem = this.votingSystems.filter(system => system.name =="classic")[0]
-            console.log(this.defaultSelectedSystem)
         })
     }
 

@@ -14,6 +14,7 @@ export class Session {
   rounds: Round[];
   state: GameState;
   creator?: Player;
+  players? : Player[]
 
 
   constructor(sessionName: string, sessionStart: number, votingSystem: VotingSystem, state: GameState) {
@@ -22,6 +23,7 @@ export class Session {
     this.votingSystem = votingSystem;
     this.rounds = [];
     this.state = state;
+
   }
 }
 // Firestore data converter

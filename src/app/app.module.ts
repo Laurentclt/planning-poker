@@ -17,6 +17,7 @@ import { RecordComponent } from './modules/records/components/record/record.comp
 import { RecordDetailComponent } from './modules/records/components/record-detail/record-detail.component';
 import { CardComponent } from './modules/shared/components/card/card.component';
 import { PlayerCardComponent } from './modules/game/components/game-session/components/player-card/player-card.component';
+import {SharedModule} from "./modules/shared/shared.module";
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { PlayerCardComponent } from './modules/game/components/game-session/comp
         FormsModule,
         provideFirebaseApp(() => initializeApp(environment.firebase)),
         provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore())
+        provideFirestore(() => getFirestore()),
+        SharedModule
     ],
   providers: [],
   bootstrap: [AppComponent]

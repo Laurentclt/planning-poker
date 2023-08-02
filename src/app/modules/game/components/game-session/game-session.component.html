@@ -1,3 +1,4 @@
+<app-modal [modal]="modal" *ngIf="!stateService.playerConnected" (modalEvent)="getModalData($event)"></app-modal>
 <main class="flexC centered fitWithHeader ">
 
   <div class="playground flexC centered">

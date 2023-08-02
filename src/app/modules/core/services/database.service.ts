@@ -1,10 +1,20 @@
 import {inject, Injectable} from '@angular/core';
-import {addDoc, collection, collectionData, doc, Firestore, getDoc} from "@angular/fire/firestore";
+import {
+    addDoc,
+    arrayUnion,
+    collection,
+    collectionData,
+    doc,
+    Firestore,
+    getDoc,
+    updateDoc
+} from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 import {Session} from "../../game/models/session.model";
 import {VotingSystem} from "../../game/models/voting-system.model";
 import {Card} from "../../shared/models/card.model";
 import {StateService} from "./state.service";
+import {Player} from "../../players/models/player.model";
 
 
 @Injectable({
@@ -20,8 +30,18 @@ export class DatabaseService {
         return this.firestore
     }
 
+    // async create<T>(data: T, collectionName : string ) {
+    //     return await addDoc(collection(this.firestore, collectionName), {...data});
+    // }
     async createSession(session: Session) {
         return await addDoc(collection(this.firestore, "sessions"), {...session});
+    }
+    async addPlayer(player: Player) {
+        if (this.stateService.session?.id)
+        return await updateDoc(doc(this.firestore, "sessions", this.stateService.session.id ),  {
+            players : arrayUnion(player)
+        })
+
     }
 
     getVotingSystems$() {
@@ -49,4 +69,6 @@ export class DatabaseService {
             throw new Error("No such document")
         }
     }
+
+
 }

@@ -1,0 +1,16 @@
+<div class="backdrop">
+    <form #modalForm="ngForm" (ngSubmit)="onSubmitForm(modalForm)">
+    <div class="modal">
+        <h1 id="title">{{modal.title}}</h1>
+        <p id="message" *ngIf="modal.message">{{modal.message}}</p>
+        <div class="field" *ngFor="let field of modal.fields" >
+            <label [for]="field">{{field}}</label>
+            <input type="text" [id]="field" [name]="field" ngModel>
+        </div>
+        <div class="buttons">
+            <button id="successBtn" type="submit">{{modal.successBtn}}</button>
+            <button *ngIf="modal.cancelBtn" type="button" id="cancelBtn">{{modal.cancelBtn}}</button>
+        </div>
+    </div>
+    </form>
+</div>
