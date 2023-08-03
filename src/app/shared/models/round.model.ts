@@ -1,19 +1,19 @@
 import {Roundstate} from "../enums/round-state.enum";
-import {Player} from "../../players/models/player.model";
+import {Player} from "../../modules/players/models/player.model";
 
 export class Round {
    id : string;
    subject : string;
-   readonly roundStart : number;
+   roundStart : number;
    roundEnd? : number;
-   readonly players : Player[];
+   players : Player[];
    roundState : Roundstate;
 
 
-  constructor(id: string, subject: string, roundStart: number, roundState: Roundstate) {
+  constructor(id: string, subject: string, roundState: Roundstate = Roundstate.Running) {
     this.id = id;
     this.subject = subject;
-    this.roundStart = roundStart;
+    this.roundStart = Date.now()
     this.players = [];
     this.roundState = roundState;
   }
