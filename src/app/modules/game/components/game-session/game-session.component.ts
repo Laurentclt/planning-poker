@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {Card} from "../../../shared/models/card.model";
+import {Card} from "../../../../shared/models/card.model";
 import {GameService} from "../../services/game.service";
 import {Player} from "../../../players/models/player.model";
 import {RoundState} from "../../enums/round-state.enum";
-import {DatabaseService} from "../../../core/services/database.service";
-import {StateService} from "../../../core/services/state.service";
+import {StateService} from "../../../../core/services/state.service";
 import {Router} from "@angular/router";
-import {Modal} from "../../../shared/models/modal.model";
+import {Modal} from "../../../../shared/models/modal.model";
+import {DatabaseService} from "../../../../core/services/database.service";
 
 @Component({
     selector: 'app-game-session',

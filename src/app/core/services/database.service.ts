@@ -10,11 +10,11 @@ import {
     updateDoc
 } from "@angular/fire/firestore";
 import {Observable} from "rxjs";
-import {Session} from "../../game/models/session.model";
-import {VotingSystem} from "../../game/models/voting-system.model";
+import {Session} from "../../modules/game/models/session.model";
+import {VotingSystem} from "../../modules/game/models/voting-system.model";
 import {Card} from "../../shared/models/card.model";
 import {StateService} from "./state.service";
-import {Player} from "../../players/models/player.model";
+import {Player} from "../../modules/players/models/player.model";
 
 
 @Injectable({

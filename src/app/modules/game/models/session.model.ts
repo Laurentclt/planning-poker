@@ -1,5 +1,5 @@
 import {GameState} from "../enums/game-state.enum";
-import {Round} from "../../shared/models/round.model";
+import {Round} from "../../../shared/models/round.model";
 import {VotingSystem} from "./voting-system.model";
 import {Player} from "../../players/models/player.model";
 import {QueryDocumentSnapshot, SnapshotOptions} from "@angular/fire/firestore";

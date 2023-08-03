@@ -1,4 +1,4 @@
-import {Card} from "../../shared/models/card.model";
+import {Card} from "../../../shared/models/card.model";
 
 
 export class VotingSystem {
