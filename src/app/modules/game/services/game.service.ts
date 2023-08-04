@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Card} from "../../shared/models/card.model";
+import {Card} from "../../../shared/models/card.model";
 import {Player} from "../../players/models/player.model";
 
 @Injectable({
