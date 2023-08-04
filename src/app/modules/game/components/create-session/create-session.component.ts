@@ -27,7 +27,7 @@ export class CreateSessionComponent implements OnInit {
 
     onSubmitForm(form: NgForm): void {
         console.log("form values :", form.value)
-        const session = new Session(form.value.sessionName, Date.now(), {...form.value.votingSystem}, GameState.Created);
+        const session = new Session(form.value.sessionName, {...form.value.votingSystem}, GameState.Created);
         this.createSession(session).then(
             () => this.goToCreatedSession()
         )
@@ -41,7 +41,7 @@ export class CreateSessionComponent implements OnInit {
                 console.log('session created with success, id = ', data.id)
 
                 // convert data to object
-                let newSession = new Session(session.sessionName, session.sessionStart, session.votingSystem, session.state)
+                let newSession = new Session(session.name, session.votingSystem, session.state)
                 newSession.id = data.id
 
                 // add session to state manager
@@ -55,12 +55,6 @@ export class CreateSessionComponent implements OnInit {
     }
 
     getVotingSystems(): void {
-        this.dbService.getVotingSystems$().subscribe(value => {
-            value.forEach(system => {
-                let newSystem = new VotingSystem(system.name, system.cards)
-                this.votingSystems.push(newSystem);
-            })
-            this.defaultSelectedSystem = this.votingSystems.filter(system => system.name == "classic")[0]
-        })
+        this.votingSystems = this.dbService.getVotingSystems()
     }
 }

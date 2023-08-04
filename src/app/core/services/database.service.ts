@@ -6,7 +6,7 @@ import {
     collectionData,
     doc,
     Firestore,
-    getDoc,
+    getDoc, getDocs,
     updateDoc
 } from "@angular/fire/firestore";
 import {Observable} from "rxjs";
@@ -26,10 +26,6 @@ export class DatabaseService {
     }
 
 
-    getInstanceDb() {
-        return this.firestore
-    }
-
     // async create<T>(data: T, collectionName : string ) {
     //     return await addDoc(collection(this.firestore, collectionName), {...data});
     // }
@@ -44,8 +40,24 @@ export class DatabaseService {
 
     }
 
-    getVotingSystems$() {
-        return collectionData( collection(this.firestore, "votingSystems")) as Observable<VotingSystem[]>
+    getVotingSystems(): VotingSystem[] {
+        const votingSystems : VotingSystem[] = []
+        let systemColRef = collection(this.firestore, "votingSystems")
+        let systemColData = getDocs(systemColRef)
+        systemColData
+            .then(values => values
+                .forEach(value => {
+                    let votingSystem = new VotingSystem(value.data()["name"], [])
+                    let cardsColRef = collection(this.firestore, "sessions", value.id, "cards")
+                    const cardsColData = getDocs(cardsColRef)
+                    cardsColData.then(values => values.forEach(value =>  {
+                        let card = new Card(value.data()['value'], value.data()["isHidden"])
+                        votingSystem.cards.push(card)
+                    } ))
+                    votingSystems.push(votingSystem)
+                }))
+        console.log(votingSystems)
+        return votingSystems
     }
     getPlayingCards() : Card[] {
         if (!this.stateService.session) {
@@ -63,7 +75,7 @@ export class DatabaseService {
         if (docSnap.exists()) {
             const data = docSnap.data()
             console.log("Document data:", docSnap.data());
-            return new Session(data['sessionName'], data['sessionStart'], data['votingSystem'], data['state'])
+            return new Session(data['sessionName'], data['votingSystem'], data['state'])
         } else {
             // docSnap.data() will be undefined in this case
             throw new Error("No such document")
