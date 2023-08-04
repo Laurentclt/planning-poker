@@ -21,16 +21,18 @@ export class CreateSessionComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getVotingSystems();
+        this.getVotingSystems$();
         this.stateService.url = this.router.url
     }
 
     onSubmitForm(form: NgForm): void {
         console.log("form values :", form.value)
-        const session = new Session(form.value.sessionName, {...form.value.votingSystem}, GameState.Created);
-        this.createSession(session).then(
-            () => this.goToCreatedSession()
-        )
+        if (form.valid) {
+            const session = new Session(form.value.sessionName, {...form.value.votingSystem}, GameState.Created);
+            this.createSession(session).then(
+                () => this.goToCreatedSession()
+            )
+        }
     }
 
     // create session in database and add session to state manager
@@ -54,7 +56,10 @@ export class CreateSessionComponent implements OnInit {
         return this.router.navigateByUrl(`/${this.stateService.session!.id}`)
     }
 
-    getVotingSystems(): void {
-        this.votingSystems = this.dbService.getVotingSystems()
+    getVotingSystems$(): void {
+        this.dbService.getVotingSystems$().subscribe(values => values.forEach(value => {
+            this.votingSystems.push(new VotingSystem(value.name, value.values))
+            this.defaultSelectedSystem = this.votingSystems.filter(value => value.name === "classic")[0]
+        }))
     }
 }

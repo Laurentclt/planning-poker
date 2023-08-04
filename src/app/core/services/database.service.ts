@@ -15,6 +15,7 @@ import {VotingSystem} from "../../modules/game/models/voting-system.model";
 import {Card} from "../../shared/models/card.model";
 import {StateService} from "./state.service";
 import {Player} from "../../modules/players/models/player.model";
+import {orderByValue} from "@angular/fire/database";
 
 
 @Injectable({
@@ -25,10 +26,6 @@ export class DatabaseService {
     constructor(private stateService : StateService) {
     }
 
-
-    // async create<T>(data: T, collectionName : string ) {
-    //     return await addDoc(collection(this.firestore, collectionName), {...data});
-    // }
     async createSession(session: Session) {
         return await addDoc(collection(this.firestore, "sessions"), {...session});
     }
@@ -40,30 +37,15 @@ export class DatabaseService {
 
     }
 
-    getVotingSystems(): VotingSystem[] {
-        const votingSystems : VotingSystem[] = []
-        let systemColRef = collection(this.firestore, "votingSystems")
-        let systemColData = getDocs(systemColRef)
-        systemColData
-            .then(values => values
-                .forEach(value => {
-                    let votingSystem = new VotingSystem(value.data()["name"], [])
-                    let cardsColRef = collection(this.firestore, "sessions", value.id, "cards")
-                    const cardsColData = getDocs(cardsColRef)
-                    cardsColData.then(values => values.forEach(value =>  {
-                        let card = new Card(value.data()['value'], value.data()["isHidden"])
-                        votingSystem.cards.push(card)
-                    } ))
-                    votingSystems.push(votingSystem)
-                }))
-        console.log(votingSystems)
-        return votingSystems
+    getVotingSystems$() : Observable<VotingSystem[]>  {
+        let colRef = collection(this.firestore, "votingSystems")
+        return collectionData(colRef) as Observable<VotingSystem[]>
     }
-    getPlayingCards() : Card[] {
+    getSystemValues() : number[] {
         if (!this.stateService.session) {
             throw new Error("can't get cards from null session")
         } else {
-            return this.stateService.session.votingSystem.cards
+            return this.stateService.session.votingSystem.values
         }
 
     }

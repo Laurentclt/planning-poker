@@ -3,18 +3,18 @@ import {Card} from "../../../shared/models/card.model";
 
 export class VotingSystem {
     name: string;
-    cards: Card[];
+    values: number[];
 
-    constructor(name: string, cards: Card[]) {
+    constructor(name: string, values: number[]) {
         this.name = name;
-        this.cards = cards;
+        this.values = values;
     }
 
     getFullName(): string {
         let name: string = "";
         name += this.name
         name += "( "
-        this.cards.forEach(card => name += card.value + ", ")
+        this.values.forEach(value => name += value + ", ")
         name += " )"
         return name;
     }

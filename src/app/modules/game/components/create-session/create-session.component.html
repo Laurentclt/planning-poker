@@ -1,12 +1,30 @@
 <main class="flexC centered fitWithHeader">
-  <h1>Create game session</h1>
+    <h1>Create game session</h1>
     <form #sessionForm="ngForm" (ngSubmit)="onSubmitForm(sessionForm)" class="modal flexC ">
-      <div class="form-input flexC ">
-        <input type="text" id="session-name" placeholder="session's name" name="sessionName" ngModel>
-        <select name="votingSystem" [(ngModel)]="defaultSelectedSystem">
-          <option  *ngFor="let system of votingSystems" [ngValue]="system" >{{system.getFullName()}}</option>
-        </select>
-      </div>
-      <button type="submit" class="btn" id="submit">Create session</button>
+        <div class="form-input flexC ">
+
+            <input type="text"
+                   #name="ngModel"
+                   id="session-name"
+                   placeholder="session's name"
+                   name="sessionName"
+                   ngModel
+                   required
+                   minlength="3">
+            <div [hidden]="name.valid || name.pristine && name.untouched">
+                <p *ngIf="name.errors?.['required']"> Name is required</p>
+                <p *ngIf="name.errors?.['minlength']">Name must be at least 3 characters long.</p>
+            </div>
+            <p *ngIf="sessionForm.invalid && sessionForm.submitted">Name is required</p>
+
+            <select name="votingSystem" [(ngModel)]="defaultSelectedSystem"
+                    required>
+                <option *ngFor="let system of votingSystems" [ngValue]="system">
+                    {{system.getFullName()}}
+                </option>
+            </select>
+
+        </div>
+        <button type="submit" class="btn" id="submit">Create session</button>
     </form>
 </main>

@@ -11,7 +11,13 @@ h1 {
 .form-input {
   gap: 10px;
 }
-.form-input *  {
+.form-input p {
+    margin: 0;
+    padding: 0 20px;
+    color: red;
+    font-size: $text-sm;
+}
+.form-input > select, input  {
   padding: 10px;
   border-radius: 11px;
   border: solid 2px $quaternaryColor;

@@ -14,25 +14,29 @@ import {DatabaseService} from "../../../../core/services/database.service";
     styleUrls: ['./game-session.component.scss']
 })
 export class GameSessionComponent implements OnInit {
-    cards!: Card[];
+    votingCards: Card[] = [];
     players!: Player[];
     players3!: Player[];
     message!: string;
     roundState!: RoundState;
     modal: Modal = {
-        title : "Enter your gaming name",
+        title: "Enter your gaming name",
         fields: ["name"],
         successBtn: "Save",
-    } ;
+    };
     protected readonly RoundState = RoundState;
-    constructor(private router : Router, private databaseService: DatabaseService, private gameService: GameService, public stateService: StateService) {
+
+    constructor(private router: Router, private databaseService: DatabaseService, private gameService: GameService, public stateService: StateService) {
     }
 
     ngOnInit(): void {
         this.databaseService.getSessionById(this.router.url)
             .then(session => {
-                    this.stateService.session = session
-                    this.cards = this.databaseService.getPlayingCards()
+                this.stateService.session = session
+                this.databaseService.getSystemValues().forEach(value => {
+                    this.votingCards.push(new Card(value))
+                })
+
             })
             .catch(err => console.log(err))
 
@@ -43,7 +47,7 @@ export class GameSessionComponent implements OnInit {
     }
 
 
-    getModalData(event : Event) {
+    getModalData(event: Event) {
         console.log(event)
         let player = new Player(event.type)
         this.databaseService.addPlayer(player).then(r => this.stateService.playerConnected = player)
