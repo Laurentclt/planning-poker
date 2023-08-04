@@ -4,24 +4,24 @@
     <div class="playground flexC centered">
 
         <div class="top flexR spaceA">
-            <app-player-card *ngFor="let player of players$ | async" [player]="player" context="top"></app-player-card>
+            <app-player-card *ngFor="let player of playersTop" [player]="player" context="top"></app-player-card>
         </div>
 
         <div class="middle flexR centered">
             <div class="left flexC spaceA">
-                <app-player-card *ngFor="let player of players$ | async" [player]="player" context="left"></app-player-card>
+                <app-player-card *ngFor="let player of playersLeft " [player]="player" context="left"></app-player-card>
             </div>
             <div class="table flexC centered">
                 <p class="message">{{message}}</p>
                 <button *ngIf="roundState != RoundState.UserDidNotVote"></button>
             </div>
             <div class="right flexC spaceA">
-                <app-player-card *ngFor="let player of players$ | async" [player]="player " context="right"></app-player-card>
+                <app-player-card *ngFor="let player of playersRight" [player]="player " context="right"></app-player-card>
             </div>
         </div>
 
         <div class="bottom flexR spaceA">
-            <app-player-card *ngFor="let player of players$ | async" [player]="player" context="bottom"></app-player-card>
+            <app-player-card *ngFor="let player of playersBottom" [player]="player" context="bottom"></app-player-card>
         </div>
 
     </div>
