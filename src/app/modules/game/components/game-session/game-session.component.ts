@@ -7,6 +7,7 @@ import {StateService} from "../../../../core/services/state.service";
 import {Router} from "@angular/router";
 import {Modal} from "../../../../shared/models/modal.model";
 import {DatabaseService} from "../../../../core/services/database.service";
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'app-game-session',
@@ -15,21 +16,16 @@ import {DatabaseService} from "../../../../core/services/database.service";
 })
 export class GameSessionComponent implements OnInit {
     votingCards: Card[] = [];
-    players!: Player[];
-    players3!: Player[];
+    players$! : Observable<Player[]>
     message!: string;
     roundState!: RoundState;
-    modal: Modal = {
-        title: "Enter your gaming name",
-        fields: ["name"],
-        successBtn: "Save",
-    };
     protected readonly RoundState = RoundState;
 
-    constructor(private router: Router, private databaseService: DatabaseService, private gameService: GameService, public stateService: StateService) {
+    constructor(private router: Router, private databaseService: DatabaseService, public stateService: StateService) {
     }
 
     ngOnInit(): void {
+        this.stateService.url = this.router.url
         this.databaseService.getSessionById(this.router.url)
             .then(session => {
                 this.stateService.session = session
@@ -39,18 +35,14 @@ export class GameSessionComponent implements OnInit {
 
             })
             .catch(err => console.log(err))
-
         this.roundState = RoundState.UserDidNotVote;
-
-        this.players = this.gameService.getPlayers();
-        this.players3 = this.players.slice(-3);
+        this.players$ = this.databaseService.getActivePlayers$(this.router.url) as Observable<Player[]>
     }
 
 
-    getModalData(event: Event) {
-        console.log(event)
-        let player = new Player(event.type)
-        this.databaseService.addPlayer(player).then(r => this.stateService.playerConnected = player)
-
+    getModalData(data: {name : string}) {
+        let player = new Player(data.name)
+        this.databaseService.addPlayer(player)
+            .then(() => this.stateService.playerConnected = player) // add player to state manager
     }
 }

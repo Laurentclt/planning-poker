@@ -17,6 +17,7 @@ import {RecordDetailComponent} from './modules/records/components/record-detail/
 import {CardComponent} from './shared/components/card/card.component';
 import {PlayerCardComponent} from './modules/game/components/game-session/components/player-card/player-card.component';
 import {ModalComponent} from "./shared/components/modal/modal.component";
+import { ModalPlayerComponent } from './modules/game/components/game-session/components/modal-player/modal-player.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import {ModalComponent} from "./shared/components/modal/modal.component";
         RecordDetailComponent,
         CardComponent,
         PlayerCardComponent,
-        ModalComponent
+        ModalComponent,
+        ModalPlayerComponent
     ],
     imports: [
         BrowserModule,

@@ -11,18 +11,14 @@ export class Session {
   sessionStart: number;
   sessionEnd?: number;
   votingSystem: VotingSystem;
-  rounds: Round[];
   state: GameState;
-  players : Player[]
 
 
   constructor(name: string, votingSystem: VotingSystem, state: GameState = GameState.Created) {
     this.name = name;
     this.sessionStart = Date.now();
     this.votingSystem = votingSystem;
-    this.rounds = [];
     this.state = state;
-    this.players = []
   }
 }
 

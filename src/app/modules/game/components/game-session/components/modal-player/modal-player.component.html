@@ -1,0 +1,20 @@
+<div class="backdrop">
+    <form #modalForm="ngForm" (ngSubmit)="onSubmitForm(modalForm)">
+        <div class="modal">
+            <h1 id="title">Enter your game name</h1>
+            <div class="field" >
+                <input type="text" id="name" name="name" ngModel #name="ngModel" placeholder="your name"
+                       required
+                       minlength="3">
+                <div [hidden]="name.valid || name.pristine && name.untouched">
+                    <p *ngIf="name.errors?.['required']">field is required</p>
+                    <p *ngIf="name.errors?.['minlength']">3 characters min are required</p>
+                </div>
+            </div>
+            <div class="buttons">
+                <button id="successBtn" type="submit">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+

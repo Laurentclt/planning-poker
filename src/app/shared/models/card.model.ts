@@ -1,8 +1,8 @@
 export class Card  {
-    value? : number;
+    value : number | null;
     isHidden : boolean;
 
-    constructor(value? : number , isHidden : boolean = false) {
+    constructor(value : number | null = null , isHidden : boolean = false) {
         this.value = value
         this.isHidden = isHidden
     }

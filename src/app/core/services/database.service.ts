@@ -1,21 +1,18 @@
 import {inject, Injectable} from '@angular/core';
 import {
     addDoc,
-    arrayUnion,
     collection,
     collectionData,
     doc,
     Firestore,
-    getDoc, getDocs,
-    updateDoc
+    getDoc,
 } from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 import {Session} from "../../modules/game/models/session.model";
 import {VotingSystem} from "../../modules/game/models/voting-system.model";
-import {Card} from "../../shared/models/card.model";
+
 import {StateService} from "./state.service";
 import {Player} from "../../modules/players/models/player.model";
-import {orderByValue} from "@angular/fire/database";
 
 
 @Injectable({
@@ -30,11 +27,11 @@ export class DatabaseService {
         return await addDoc(collection(this.firestore, "sessions"), {...session});
     }
     async addPlayer(player: Player) {
-        if (this.stateService.session?.id)
-        return await updateDoc(doc(this.firestore, "sessions", this.stateService.session.id ),  {
-            players : arrayUnion(player)
-        })
-
+        if (this.stateService.url) {
+            let colRef = collection(this.firestore, "sessions", this.stateService.url, "players")
+            console.log(colRef)
+            await addDoc(colRef, {...player})
+        }
     }
 
     getVotingSystems$() : Observable<VotingSystem[]>  {
@@ -65,4 +62,8 @@ export class DatabaseService {
     }
 
 
+    getActivePlayers$(id : string) {
+        let colRef = collection(this.firestore, "sessions", id, "players")
+        return collectionData(colRef)
+    }
 }
