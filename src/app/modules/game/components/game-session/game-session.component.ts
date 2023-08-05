@@ -5,7 +5,8 @@ import {RoundState} from "../../enums/round-state.enum";
 import {StateService} from "../../../../core/services/state.service";
 import {Router} from "@angular/router";
 import {DatabaseService} from "../../../../core/services/database.service";
-import {Observable} from "rxjs";
+import {distinctUntilChanged, Observable} from "rxjs";
+import  { isEqual } from 'lodash';
 
 @Component({
     selector: 'app-game-session',
@@ -14,7 +15,6 @@ import {Observable} from "rxjs";
 })
 export class GameSessionComponent implements OnInit {
     votingCards: Card[] = [];
-    players$! : Observable<Player[]>
     playersTop : Player[] = []
     playersLeft : Player[] = []
     playersRight : Player[] = []
@@ -39,20 +39,7 @@ export class GameSessionComponent implements OnInit {
             })
             .catch(err => console.log(err))
         this.roundState = RoundState.UserDidNotVote;
-        this.players$ = this.databaseService.getActivePlayers$(this.router.url) as Observable<Player[]>
-        this.players$.subscribe(data => data.filter((value, index, array) => {
-            if (index === 1 || index === 5 || index === 7 || index === 9) {
-                this.playersTop.push(array[index])
-            }else if (index === 2 || index === 10 ) {
-                this.playersLeft.push(array[index])
-            } else if (index === 0 || index === 4 || index === 6 || index === 8) {
-                this.playersBottom.push(array[index])
-            } else if (index === 3 || index === 11) {
-                this.playersRight.push(array[index])
-            }
-
-
-        }  ))
+        this.getPlayersAndPlaceThem()
     }
 
 
@@ -60,5 +47,41 @@ export class GameSessionComponent implements OnInit {
         let player = new Player(data.name)
         this.databaseService.addPlayer(player)
             .then(() => this.stateService.playerConnected = player) // add player to state manager
+    }
+
+    private getPlayersAndPlaceThem() {
+
+            this.placePlayers(this.getPlayers())
+
+    }
+
+    private getPlayers() {
+        return this.databaseService.getActivePlayers$(this.router.url)
+            .pipe(distinctUntilChanged((prev, current) => {
+                return isEqual(prev, current)
+            }))
+    }
+
+    private placePlayers(players: Observable<Player[]>) {
+        players.subscribe(data =>  {
+            this.playersLeft = []
+            this.playersTop = []
+            this.playersRight = []
+            this.playersBottom = []
+            data.forEach((player, index, array) => {
+                if ((index  % 6 == 0) || (index % 6 == 4)) {
+                    this.playersBottom.push(player);
+                }
+                if ((index % 6 == 1) || (index % 6 == 5)) {
+                    this.playersTop.push(player);
+                }
+                if (index % 6 == 2) {
+                    this.playersRight.push(player);
+                }
+                if (index % 6 == 3) {
+                    this.playersLeft.push(player);
+                }
+            })
+        })
     }
 }

@@ -64,6 +64,6 @@ export class DatabaseService {
 
     getActivePlayers$(id : string) {
         let colRef = collection(this.firestore, "sessions", id, "players")
-        return collectionData(colRef)
+        return collectionData(colRef) as Observable<Player[]>
     }
 }
