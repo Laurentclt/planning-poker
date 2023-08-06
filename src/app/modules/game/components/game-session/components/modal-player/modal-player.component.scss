@@ -19,7 +19,7 @@ p {
 .modal {
     display: flex;
     flex-direction: column;
-    padding: 30px;
+    padding: 30px 60px;
     border: #1e1e1e solid 2px;
     border-radius: 11px;
     background-color: white;
@@ -28,8 +28,8 @@ p {
 .field {
     padding: 20px 0;
     > input {
-        width: 100%;
-        padding: 5px;
+        width: 90%;
+        padding: 5%;
         border-radius: 5px;
     }
 }

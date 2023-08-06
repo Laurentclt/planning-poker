@@ -15,7 +15,6 @@ export class HomeComponent implements OnInit{
     }
 
     ngOnInit() {
-        this.stateService.url = this.router.url
     }
     goToCreateSession() {
         this.router.navigateByUrl(RoutesPathEnum.CreateSession)

@@ -3,9 +3,9 @@ import {
     addDoc,
     collection,
     collectionData,
-    doc,
+    doc, docData,
     Firestore,
-    getDoc,
+    getDoc, onSnapshot, updateDoc,
 } from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 import {Session} from "../../modules/game/models/session.model";
@@ -13,6 +13,7 @@ import {VotingSystem} from "../../modules/game/models/voting-system.model";
 
 import {StateService} from "./state.service";
 import {Player} from "../../modules/players/models/player.model";
+import {Router} from "@angular/router";
 
 
 @Injectable({
@@ -20,50 +21,75 @@ import {Player} from "../../modules/players/models/player.model";
 })
 export class DatabaseService {
     firestore: Firestore = inject(Firestore);
-    constructor(private stateService : StateService) {
+
+    constructor(private stateService: StateService, private router: Router) {
     }
 
-    async createSession(session: Session) {
-        return await addDoc(collection(this.firestore, "sessions"), {...session});
-    }
-    async addPlayer(player: Player) {
-        if (this.stateService.url) {
-            let colRef = collection(this.firestore, "sessions", this.stateService.url, "players")
-            console.log(colRef)
-            await addDoc(colRef, {...player})
-        }
+    createSession(session: Session): Promise<string>  {
+        let colRef = collection(this.firestore, 'sessions')
+        return addDoc(colRef, {...session})
+            .then(doc => {
+                docData(doc)
+                    .subscribe(data => {
+                        this.stateService.session = data as Session
+                        this.stateService.session.id = doc.id
+                        console.log("state session :", this.stateService.session)
+                    })
+                return doc.id
+            })
     }
 
-    getVotingSystems$() : Observable<VotingSystem[]>  {
+    addPlayer(player: Player) : Promise<string> {
+        let colRef = collection(this.firestore, "sessions", this.router.url, "players")
+        return addDoc(colRef, {...player})
+            .then(doc =>  {
+                docData(doc)
+                        .subscribe(data => {
+                            this.stateService.playerConnected = data as Player
+                            this.stateService.playerConnected.id = doc.id
+                            console.log("state playerConnected :", this.stateService.playerConnected)
+                        })
+                return doc.id
+                }
+            )
+    }
+
+    getVotingSystems$(): Observable<VotingSystem[]> {
         let colRef = collection(this.firestore, "votingSystems")
         return collectionData(colRef) as Observable<VotingSystem[]>
     }
-    getSystemValues() : number[] {
-        if (!this.stateService.session) {
-            throw new Error("can't get cards from null session")
-        } else {
-            return this.stateService.session.votingSystem.values
-        }
 
-    }
-
-    async getSessionById(url: string) {
-        const docRef = doc(this.firestore, "sessions", url);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-            const data = docSnap.data()
-            console.log("Document data:", docSnap.data());
-            return new Session(data['sessionName'], data['votingSystem'], data['state'])
-        } else {
-            // docSnap.data() will be undefined in this case
-            throw new Error("No such document")
-        }
+   getSessionByUrl(url : string)  {
+        let docRef = doc(this.firestore, 'sessions', url)
+        docData(docRef).subscribe(data => {
+            this.stateService.session = data as Session
+            this.stateService.session.id = docRef.id
+            console.log("state session :", this.stateService.session)
+        })
+        return getDoc(docRef).then(data => {
+            let session = data.data() as Session
+            session.id = data.id
+            return session
+        })
     }
 
 
-    getActivePlayers$(id : string) {
+    getActivePlayers$(id: string) {
         let colRef = collection(this.firestore, "sessions", id, "players")
         return collectionData(colRef) as Observable<Player[]>
+    }
+
+    async setPlayerInactive() {
+        if (this.stateService.playerConnected && this.stateService.session) {
+            if (this.stateService.session.id && this.stateService.playerConnected.id) {
+                let sessionId = this.stateService.session.id
+                let playerId = this.stateService.playerConnected.id
+
+                let docRef = doc(this.firestore, "sessions", sessionId, "players", playerId)
+                return await updateDoc(docRef, {isActive: false})
+            }
+        } else {
+            return new Error("couldn't set player to inactive")
+        }
     }
 }

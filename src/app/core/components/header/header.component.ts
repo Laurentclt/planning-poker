@@ -11,7 +11,7 @@ import {StateService} from "../../services/state.service";
 })
 export class HeaderComponent {
 
-    constructor(private router: Router, public stateService : StateService) {
+    constructor(public router: Router, public stateService : StateService) {
     }
 
     goToHomePage(): Promise<boolean> {

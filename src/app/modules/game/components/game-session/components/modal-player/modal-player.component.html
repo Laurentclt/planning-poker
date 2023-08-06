@@ -1,9 +1,9 @@
 <div class="backdrop">
     <form #modalForm="ngForm" (ngSubmit)="onSubmitForm(modalForm)">
         <div class="modal">
-            <h1 id="title">Enter your game name</h1>
+            <h1 id="title">Enter your pseudo</h1>
             <div class="field" >
-                <input type="text" id="name" name="name" ngModel #name="ngModel" placeholder="your name"
+                <input type="text" id="name" name="name" ngModel #name="ngModel" placeholder="your pseudo"
                        required
                        minlength="3">
                 <div [hidden]="name.valid || name.pristine && name.untouched">

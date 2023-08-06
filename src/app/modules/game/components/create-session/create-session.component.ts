@@ -8,6 +8,7 @@ import {VotingSystem} from "../../models/voting-system.model";
 import {StateService} from "../../../../core/services/state.service";
 
 
+
 @Component({
     selector: 'app-create-session',
     templateUrl: './create-session.component.html',
@@ -17,43 +18,23 @@ export class CreateSessionComponent implements OnInit {
     votingSystems: VotingSystem[] = [];
     defaultSelectedSystem!: VotingSystem;
 
-    constructor(private router: Router, private dbService: DatabaseService, public stateService: StateService) {
+    constructor(private router: Router, private dbService: DatabaseService) {
     }
 
     ngOnInit() {
         this.getVotingSystems$();
-        this.stateService.url = this.router.url
     }
 
     onSubmitForm(form: NgForm): void {
         console.log("form values :", form.value)
         if (form.valid) {
             const session = new Session(form.value.sessionName, {...form.value.votingSystem}, GameState.Created);
-            this.createSession(session).then(
-                () => this.goToCreatedSession()
-            )
+            this.dbService.createSession(session).then(id => this.goToCreatedSession(id))
         }
     }
 
-    // create session in database and add session to state manager
-    private async createSession(session: Session): Promise<void> {
-        // create session in database
-        await this.dbService.createSession(session)
-            .then(data => {
-                console.log('session created with success, id = ', data.id)
-
-                // convert data to object
-                let newSession = new Session(session.name, session.votingSystem, session.state)
-                newSession.id = data.id
-
-                // add session to state manager
-                this.stateService.session = newSession
-            })
-            .catch(err => console.log(err))
-    }
-
-    goToCreatedSession(): Promise<boolean> {
-        return this.router.navigateByUrl(`/${this.stateService.session!.id}`)
+    goToCreatedSession(id : string): Promise<boolean> {
+        return this.router.navigateByUrl(`/${id}`)
     }
 
     getVotingSystems$(): void {

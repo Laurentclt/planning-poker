@@ -12,6 +12,7 @@ export class Session {
   sessionEnd?: number;
   votingSystem: VotingSystem;
   state: GameState;
+  players? : Player[];
 
 
   constructor(name: string, votingSystem: VotingSystem, state: GameState = GameState.Created) {
