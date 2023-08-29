@@ -25,7 +25,8 @@ export class GameSessionComponent implements OnInit, OnDestroy{
     protected readonly RoundState = RoundState;
 
 
-    constructor(private router: Router, private databaseService: DatabaseService, public stateService: StateService) {
+    constructor(private router: Router, private databaseService: DatabaseService, public stateService: StateService ) {
+
     }
 
     ngOnInit(): void {
@@ -79,7 +80,32 @@ export class GameSessionComponent implements OnInit, OnDestroy{
         })
     }
 
-    ngOnDestroy(): void {
+    private removePlayerFromView(player : Player) {
+        if (player != this.stateService.playerConnected) {
+            throw new Error("can't remove other player")
+        }
+        let array = [this.playersLeft, this.playersRight, this.playersTop, this.playersBottom]
+        for (let i = 0; i < array.length; i ++) {
+            if (this.removePlayerFromArray(array[i], player)) {
+                    break;
+            }
+        }
+    }
+    private removePlayerFromArray(array : Player[], player : Player ) : boolean {
+        if (array.includes(player)) {
+            let index = array.indexOf(player)
+            array.splice(index, 1)
+            return true;
+        }
+        return false;
+    }
+    private setPlayerToInactive() {
         this.databaseService.setPlayerInactive().then((r) => console.log(r))
+    }
+    ngOnDestroy(): void {
+        if (this.stateService.playerConnected) {
+            this.removePlayerFromView(this.stateService.playerConnected)
+        }
+        this.setPlayerToInactive()
     }
 }

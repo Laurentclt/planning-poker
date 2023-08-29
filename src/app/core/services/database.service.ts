@@ -5,7 +5,7 @@ import {
     collectionData,
     doc, docData,
     Firestore,
-    getDoc, onSnapshot, updateDoc,
+    getDoc, updateDoc,
 } from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 import {Session} from "../../modules/game/models/session.model";
@@ -80,16 +80,19 @@ export class DatabaseService {
     }
 
     async setPlayerInactive() {
-        if (this.stateService.playerConnected && this.stateService.session) {
-            if (this.stateService.session.id && this.stateService.playerConnected.id) {
-                let sessionId = this.stateService.session.id
-                let playerId = this.stateService.playerConnected.id
-
-                let docRef = doc(this.firestore, "sessions", sessionId, "players", playerId)
-                return await updateDoc(docRef, {isActive: false})
-            }
-        } else {
-            return new Error("couldn't set player to inactive")
+        if (!this.stateService.playerConnected?.id) {
+            throw new Error("there is no current connected player")
         }
+        if (!this.stateService.session?.id) {
+            throw new Error("there is no current session active")
+        }
+        else  {
+            let sessionId = this.stateService.session.id
+            let playerId = this.stateService.playerConnected.id
+
+            let docRef = doc(this.firestore, "sessions", sessionId, "players", playerId)
+            return await updateDoc(docRef, {isActive: false})
+        }
+
     }
 }
