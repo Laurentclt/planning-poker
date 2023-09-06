@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Card} from "../../../../shared/models/card.model";
 import {Player} from "../../../players/models/player.model";
 import {RoundState} from "../../enums/round-state.enum";
@@ -108,6 +108,10 @@ export class GameSessionComponent implements OnInit, OnDestroy {
         this.databaseService.setPlayerInactive().then((r) => console.log(r))
     }
 
+    @HostListener('window:beforeunload', ['$event'])
+    disconnectPlayer($event: any): void {
+        this.ngOnDestroy()
+    }
     ngOnDestroy(): void {
         if (this.stateService.playerConnected) {
             this.removePlayerFromView(this.stateService.playerConnected)

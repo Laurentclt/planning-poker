@@ -42,20 +42,23 @@ export class DatabaseService {
     async addPlayer(player: Player) {
         // get collection reference of players
         let colRef = collection(this.firestore, "sessions", this.router.url, "players")
-        // check if player is already in session
+        // check if player is already created
         if (player.id) {
             let docRef = doc(colRef, player.id);
             getDoc(docRef)
+                // if player already played in this game session
                 .then(data => {
                     console.log('reactive players')
                     return updateDoc(docRef, {
                         isActive: true
                     })
                 })
+                // if player did not played in this session before
                 .catch(error => {
                     console.log('add player to the session')
                     return setDoc(doc(colRef, player.id), {...player})
                 })
+            // if players has not been created before
         } else {
             let doc = await addDoc(colRef, {...player});
             docData(doc)
