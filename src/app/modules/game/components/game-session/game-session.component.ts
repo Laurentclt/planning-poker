@@ -6,7 +6,7 @@ import {StateService} from "../../../../core/services/state.service";
 import {Router} from "@angular/router";
 import {DatabaseService} from "../../../../core/services/database.service";
 import {distinctUntilChanged, Observable} from "rxjs";
-import { isEqual } from 'lodash';
+import {isEqual} from 'lodash';
 import {Session} from "../../models/session.model";
 
 @Component({
@@ -14,18 +14,18 @@ import {Session} from "../../models/session.model";
     templateUrl: './game-session.component.html',
     styleUrls: ['./game-session.component.scss']
 })
-export class GameSessionComponent implements OnInit, OnDestroy{
+export class GameSessionComponent implements OnInit, OnDestroy {
     votingCards: Card[] = [];
-    playersTop : Player[] = []
-    playersLeft : Player[] = []
-    playersRight : Player[] = []
-    playersBottom : Player[] = []
+    playersTop: Player[] = []
+    playersLeft: Player[] = []
+    playersRight: Player[] = []
+    playersBottom: Player[] = []
     message!: string;
     roundState!: RoundState;
     protected readonly RoundState = RoundState;
 
 
-    constructor(private router: Router, private databaseService: DatabaseService, public stateService: StateService ) {
+    constructor(private router: Router, private databaseService: DatabaseService, public stateService: StateService) {
 
     }
 
@@ -33,18 +33,21 @@ export class GameSessionComponent implements OnInit, OnDestroy{
         this.roundState = RoundState.UserDidNotVote;
         this.placePlayers(this.getPlayers()) // get players and place them
         this.databaseService.getSessionByUrl(this.router.url).then(session => this.setVotingSystem(session))
+        if (this.stateService.playerConnected) {
+            this.databaseService.addPlayer(this.stateService.playerConnected);
+        }
     }
 
 
-    private setVotingSystem(session : Session) {
+    private setVotingSystem(session: Session) {
         session.votingSystem.values.forEach(value => {
             this.votingCards.push(new Card(value))
         })
     }
 
-    getModalData(data: {name : string}) {
+    getModalData(data: { name: string }) {
         let player = new Player(data.name)
-        this.databaseService.addPlayer(player)
+        this.databaseService.addPlayer(player);
     }
 
 
@@ -56,7 +59,7 @@ export class GameSessionComponent implements OnInit, OnDestroy{
     }
 
     private placePlayers(players: Observable<Player[]>) {
-        players.subscribe(data =>  {
+        players.subscribe(data => {
             this.playersLeft = []
             this.playersTop = []
             this.playersRight = []
@@ -80,18 +83,19 @@ export class GameSessionComponent implements OnInit, OnDestroy{
         })
     }
 
-    private removePlayerFromView(player : Player) {
+    private removePlayerFromView(player: Player) {
         if (player != this.stateService.playerConnected) {
             throw new Error("can't remove other player")
         }
         let array = [this.playersLeft, this.playersRight, this.playersTop, this.playersBottom]
-        for (let i = 0; i < array.length; i ++) {
+        for (let i = 0; i < array.length; i++) {
             if (this.removePlayerFromArray(array[i], player)) {
-                    break;
+                break;
             }
         }
     }
-    private removePlayerFromArray(array : Player[], player : Player ) : boolean {
+
+    private removePlayerFromArray(array: Player[], player: Player): boolean {
         if (array.includes(player)) {
             let index = array.indexOf(player)
             array.splice(index, 1)
@@ -99,9 +103,11 @@ export class GameSessionComponent implements OnInit, OnDestroy{
         }
         return false;
     }
+
     private setPlayerToInactive() {
         this.databaseService.setPlayerInactive().then((r) => console.log(r))
     }
+
     ngOnDestroy(): void {
         if (this.stateService.playerConnected) {
             this.removePlayerFromView(this.stateService.playerConnected)

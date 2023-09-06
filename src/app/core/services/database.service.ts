@@ -3,9 +3,9 @@ import {
     addDoc,
     collection,
     collectionData,
-    doc, docData,
+    doc, docData, documentId,
     Firestore,
-    getDoc, updateDoc,
+    getDoc, setDoc, updateDoc,
 } from "@angular/fire/firestore";
 import {Observable} from "rxjs";
 import {Session} from "../../modules/game/models/session.model";
@@ -25,7 +25,7 @@ export class DatabaseService {
     constructor(private stateService: StateService, private router: Router) {
     }
 
-    createSession(session: Session): Promise<string>  {
+    createSession(session: Session): Promise<string> {
         let colRef = collection(this.firestore, 'sessions')
         return addDoc(colRef, {...session})
             .then(doc => {
@@ -39,19 +39,32 @@ export class DatabaseService {
             })
     }
 
-    addPlayer(player: Player) : Promise<string> {
+    async addPlayer(player: Player) {
+        // get collection reference of players
         let colRef = collection(this.firestore, "sessions", this.router.url, "players")
-        return addDoc(colRef, {...player})
-            .then(doc =>  {
-                docData(doc)
-                        .subscribe(data => {
-                            this.stateService.playerConnected = data as Player
-                            this.stateService.playerConnected.id = doc.id
-                            console.log("state playerConnected :", this.stateService.playerConnected)
-                        })
-                return doc.id
-                }
-            )
+        // check if player is already in session
+        if (player.id) {
+            let docRef = doc(colRef, player.id);
+            getDoc(docRef)
+                .then(data => {
+                    console.log('reactive players')
+                    return updateDoc(docRef, {
+                        isActive: true
+                    })
+                })
+                .catch(error => {
+                    console.log('add player to the session')
+                    return setDoc(doc(colRef, player.id), {...player})
+                })
+        } else {
+            let doc = await addDoc(colRef, {...player});
+            docData(doc)
+                .subscribe(data => {
+                    this.stateService.playerConnected = data as Player
+                    this.stateService.playerConnected.id = doc.id
+                })
+            ;
+        }
     }
 
     getVotingSystems$(): Observable<VotingSystem[]> {
@@ -59,7 +72,7 @@ export class DatabaseService {
         return collectionData(colRef) as Observable<VotingSystem[]>
     }
 
-   getSessionByUrl(url : string)  {
+    getSessionByUrl(url: string) {
         let docRef = doc(this.firestore, 'sessions', url)
         docData(docRef).subscribe(data => {
             this.stateService.session = data as Session
@@ -73,6 +86,14 @@ export class DatabaseService {
         })
     }
 
+    getPlayerById(id: string) {
+        let docRef = doc(this.firestore, "sessions", this.router.url, "players", id)
+        return getDoc(docRef).then(data => {
+            let player = data.data() as Player
+            player.id = data.id
+            return player
+        })
+    }
 
     getActivePlayers$(id: string) {
         let colRef = collection(this.firestore, "sessions", id, "players")
@@ -85,8 +106,7 @@ export class DatabaseService {
         }
         if (!this.stateService.session?.id) {
             throw new Error("there is no current session active")
-        }
-        else  {
+        } else {
             let sessionId = this.stateService.session.id
             let playerId = this.stateService.playerConnected.id
 
