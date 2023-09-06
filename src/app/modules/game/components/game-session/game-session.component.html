@@ -1,5 +1,10 @@
 <app-modal-player *ngIf="!stateService.playerConnected" (modalEvent)="getModalData($event)"></app-modal-player>
-<main class="flexC centered fitWithHeader ">
+<main *ngIf="messageSessionClose">
+    <h1>{{messageSessionClose}}</h1>
+
+    <button>see statistics of this game</button>
+</main>
+<main *ngIf="!messageSessionClose" class="flexC centered fitWithHeader ">
 
     <div class="playground flexC centered">
 

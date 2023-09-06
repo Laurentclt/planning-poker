@@ -1,5 +1,4 @@
 export enum GameState {
-  Created = "Created",
-  Running = "Running",
-  Over = "Over"
+  Open = "Open",
+  Close = "Close"
 }

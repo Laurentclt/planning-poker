@@ -1,5 +1,4 @@
 import {GameState} from "../enums/game-state.enum";
-import {Round} from "../../../shared/models/round.model";
 import {VotingSystem} from "./voting-system.model";
 import {Player} from "../../players/models/player.model";
 
@@ -15,7 +14,7 @@ export class Session {
   players? : Player[];
 
 
-  constructor(name: string, votingSystem: VotingSystem, state: GameState = GameState.Created) {
+  constructor(name: string, votingSystem: VotingSystem, state: GameState = GameState.Open) {
     this.name = name;
     this.sessionStart = Date.now();
     this.votingSystem = votingSystem;

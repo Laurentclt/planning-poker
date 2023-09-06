@@ -8,6 +8,7 @@ import {DatabaseService} from "../../../../core/services/database.service";
 import {distinctUntilChanged, Observable} from "rxjs";
 import {isEqual} from 'lodash';
 import {Session} from "../../models/session.model";
+import {GameState} from "../../enums/game-state.enum";
 
 @Component({
     selector: 'app-game-session',
@@ -21,6 +22,7 @@ export class GameSessionComponent implements OnInit, OnDestroy {
     playersRight: Player[] = []
     playersBottom: Player[] = []
     message!: string;
+    messageSessionClose! : string;
     roundState!: RoundState;
     protected readonly RoundState = RoundState;
 
@@ -30,12 +32,20 @@ export class GameSessionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.roundState = RoundState.UserDidNotVote;
-        this.placePlayers(this.getPlayers()) // get players and place them
-        this.databaseService.getSessionByUrl(this.router.url).then(session => this.setVotingSystem(session))
-        if (this.stateService.playerConnected) {
-            this.databaseService.addPlayer(this.stateService.playerConnected);
-        }
+        let url = this.router.url;
+        this.databaseService.getSessionByUrl(url).then(session => {
+            if (session.state == GameState.Close) {
+                this.messageSessionClose = "This session is closed."
+            } else {
+                this.roundState = RoundState.UserDidNotVote;
+                this.placePlayers(this.getPlayers()) // get players and place them
+                this.databaseService.getSessionByUrl(url).then(session => this.setVotingSystem(session))
+                if (this.stateService.playerConnected) {
+                    this.databaseService.addPlayer(this.stateService.playerConnected);
+                }
+            }
+        })
+
     }
 
 
@@ -105,11 +115,20 @@ export class GameSessionComponent implements OnInit, OnDestroy {
     }
 
     private setPlayerToInactive() {
-        this.databaseService.setPlayerInactive().then((r) => console.log(r))
+        this.databaseService.setPlayerInactive()
     }
 
-    @HostListener('window:beforeunload', ['$event'])
-    disconnectPlayer($event: any): void {
+    private checkGameState() {
+        this.databaseService.getActivePlayers$(this.router.url).subscribe(data => {
+            if (data.length <= 0) {
+                console.log("last player gone")
+                let id = this.stateService.session?.id!
+                this.databaseService.updateSessionState(id, GameState.Close)
+            }
+        })
+    }
+    @HostListener('window:beforeunload')
+    disconnectPlayer(): void {
         this.ngOnDestroy()
     }
     ngOnDestroy(): void {
@@ -117,5 +136,6 @@ export class GameSessionComponent implements OnInit, OnDestroy {
             this.removePlayerFromView(this.stateService.playerConnected)
         }
         this.setPlayerToInactive()
+        this.checkGameState();
     }
 }

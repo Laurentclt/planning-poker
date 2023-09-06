@@ -28,7 +28,7 @@ export class CreateSessionComponent implements OnInit {
     onSubmitForm(form: NgForm): void {
         console.log("form values :", form.value)
         if (form.valid) {
-            const session = new Session(form.value.sessionName, {...form.value.votingSystem}, GameState.Created);
+            const session = new Session(form.value.sessionName, {...form.value.votingSystem}, GameState.Open);
             this.dbService.createSession(session).then(id => this.goToCreatedSession(id))
         }
     }

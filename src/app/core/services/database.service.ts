@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {
     addDoc,
     collection,
-    collectionData,
+    collectionData, deleteDoc,
     doc, docData, documentId,
     Firestore,
     getDoc, setDoc, updateDoc,
@@ -14,6 +14,7 @@ import {VotingSystem} from "../../modules/game/models/voting-system.model";
 import {StateService} from "./state.service";
 import {Player} from "../../modules/players/models/player.model";
 import {Router} from "@angular/router";
+import {GameState} from "../../modules/game/enums/game-state.enum";
 
 
 @Injectable({
@@ -101,6 +102,12 @@ export class DatabaseService {
     getActivePlayers$(id: string) {
         let colRef = collection(this.firestore, "sessions", id, "players")
         return collectionData(colRef) as Observable<Player[]>
+    }
+    updateSessionState(id: string, state : GameState) {
+        let docRef = doc(this.firestore, 'sessions', id)
+        updateDoc(docRef, {
+            state : state
+        })
     }
 
     async setPlayerInactive() {
