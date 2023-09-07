@@ -56,6 +56,7 @@ export class DatabaseService {
                 // if player did not played in this session before
                 .catch(error => {
                     console.log('add player to the session')
+                    player.isActive = true;
                     return setDoc(doc(colRef, player.id), {...player})
                 })
             // if players has not been created before

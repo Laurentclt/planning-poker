@@ -5,7 +5,7 @@ import {RoundState} from "../../enums/round-state.enum";
 import {StateService} from "../../../../core/services/state.service";
 import {Router} from "@angular/router";
 import {DatabaseService} from "../../../../core/services/database.service";
-import {distinctUntilChanged, Observable} from "rxjs";
+import {distinctUntilChanged, Observable, takeWhile} from "rxjs";
 import {isEqual} from 'lodash';
 import {Session} from "../../models/session.model";
 import {GameState} from "../../enums/game-state.enum";
@@ -22,7 +22,7 @@ export class GameSessionComponent implements OnInit, OnDestroy {
     playersRight: Player[] = []
     playersBottom: Player[] = []
     message!: string;
-    messageSessionClose! : string;
+    messageSessionClose!: string;
     roundState!: RoundState;
     protected readonly RoundState = RoundState;
 
@@ -114,14 +114,18 @@ export class GameSessionComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private checkGameState(url : string) {
-        return this.databaseService.getActivePlayers$(url).subscribe(data => {
-            if (data.length <= 0) {
-                console.log("last player gone")
-                let id = this.stateService.session?.id!
-                this.databaseService.updateSessionState(id, GameState.Close)
-            }
-        })
+    private checkGameState(url: string) {
+        return this.databaseService.getActivePlayers$(url).pipe(
+            takeWhile(value => value.length > 0))
+            .subscribe(
+                data => {
+                    console.log(data.length)
+                },
+                null,
+                () => {
+                    let id = this.stateService.session?.id!
+                    this.databaseService.updateSessionState(id, GameState.Close)
+                })
     }
 
     @HostListener('window:beforeunload')
@@ -133,7 +137,7 @@ export class GameSessionComponent implements OnInit, OnDestroy {
         if (this.stateService.playerConnected) {
             this.removePlayerFromView(this.stateService.playerConnected)
         }
-        this.setPlayerToInactive().then(()=> this.checkGameState(this.stateService.session?.id!))
+        this.setPlayerToInactive().then(() => this.checkGameState(this.stateService.session?.id!))
     }
 
     private setPlayerToInactive() {
