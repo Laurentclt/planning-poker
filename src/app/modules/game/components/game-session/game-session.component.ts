@@ -114,12 +114,8 @@ export class GameSessionComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private setPlayerToInactive() {
-        this.databaseService.setPlayerInactive()
-    }
-
-    private checkGameState() {
-        this.databaseService.getActivePlayers$(this.router.url).subscribe(data => {
+    private checkGameState(url : string) {
+        return this.databaseService.getActivePlayers$(url).subscribe(data => {
             if (data.length <= 0) {
                 console.log("last player gone")
                 let id = this.stateService.session?.id!
@@ -127,15 +123,20 @@ export class GameSessionComponent implements OnInit, OnDestroy {
             }
         })
     }
+
     @HostListener('window:beforeunload')
     disconnectPlayer(): void {
         this.ngOnDestroy()
     }
+
     ngOnDestroy(): void {
         if (this.stateService.playerConnected) {
             this.removePlayerFromView(this.stateService.playerConnected)
         }
-        this.setPlayerToInactive()
-        this.checkGameState();
+        this.setPlayerToInactive().then(()=> this.checkGameState(this.stateService.session?.id!))
+    }
+
+    private setPlayerToInactive() {
+        return this.databaseService.setPlayerInactive()
     }
 }

@@ -2,12 +2,12 @@ import {inject, Injectable} from '@angular/core';
 import {
     addDoc,
     collection,
-    collectionData, deleteDoc,
-    doc, docData, documentId,
+    collectionData,
+    doc, docData,
     Firestore,
     getDoc, setDoc, updateDoc,
 } from "@angular/fire/firestore";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {Session} from "../../modules/game/models/session.model";
 import {VotingSystem} from "../../modules/game/models/voting-system.model";
 
@@ -34,7 +34,6 @@ export class DatabaseService {
                     .subscribe(data => {
                         this.stateService.session = data as Session
                         this.stateService.session.id = doc.id
-                        console.log("state session :", this.stateService.session)
                     })
                 return doc.id
             })
@@ -81,7 +80,6 @@ export class DatabaseService {
         docData(docRef).subscribe(data => {
             this.stateService.session = data as Session
             this.stateService.session.id = docRef.id
-            console.log("state session :", this.stateService.session)
         })
         return getDoc(docRef).then(data => {
             let session = data.data() as Session
@@ -101,7 +99,9 @@ export class DatabaseService {
 
     getActivePlayers$(id: string) {
         let colRef = collection(this.firestore, "sessions", id, "players")
-        return collectionData(colRef) as Observable<Player[]>
+        return  collectionData(colRef).pipe(
+            map(players => players.filter(player => player["isActive"] === true))
+        ) as Observable<Player[]>;
     }
     updateSessionState(id: string, state : GameState) {
         let docRef = doc(this.firestore, 'sessions', id)
