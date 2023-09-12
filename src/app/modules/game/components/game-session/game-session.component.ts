@@ -17,14 +17,15 @@ import {GameState} from "../../enums/game-state.enum";
 })
 export class GameSessionComponent implements OnInit, OnDestroy {
     votingCards: Card[] = [];
-    playersTop: Player[] = []
-    playersLeft: Player[] = []
-    playersRight: Player[] = []
-    playersBottom: Player[] = []
+    playersTop: Player[] = [];
+    playersLeft: Player[] = [];
+    playersRight: Player[] = [];
+    playersBottom: Player[] = [];
     message!: string;
     messageSessionClose!: string;
     roundState!: RoundState;
     protected readonly RoundState = RoundState;
+    playerConnected!: Player;
 
 
     constructor(private router: Router, private databaseService: DatabaseService, public stateService: StateService) {
@@ -41,7 +42,9 @@ export class GameSessionComponent implements OnInit, OnDestroy {
                 this.placePlayers(this.getPlayers()) // get players and place them
                 this.databaseService.getSessionByUrl(url).then(session => this.setVotingSystem(session))
                 if (this.stateService.playerConnected) {
-                    this.databaseService.addPlayer(this.stateService.playerConnected);
+                    this.databaseService.addPlayer(this.stateService.playerConnected).then(() => {
+                        this.playerConnected =  this.stateService.playerConnected!
+                    })
                 }
             }
         })
@@ -57,7 +60,9 @@ export class GameSessionComponent implements OnInit, OnDestroy {
 
     getModalData(data: { name: string }) {
         let player = new Player(data.name)
-        this.databaseService.addPlayer(player);
+        this.databaseService.addPlayer(player).then(() => {
+            this.playerConnected =  this.stateService.playerConnected!
+        })
     }
 
 
@@ -143,4 +148,9 @@ export class GameSessionComponent implements OnInit, OnDestroy {
     private setPlayerToInactive() {
         return this.databaseService.setPlayerInactive()
     }
+
+    toggleCard(card: Card) {
+       this.databaseService.updatePlayerCardValue(card)
+    }
+
 }

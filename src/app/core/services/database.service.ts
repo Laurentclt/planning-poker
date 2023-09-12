@@ -15,6 +15,7 @@ import {StateService} from "./state.service";
 import {Player} from "../../modules/players/models/player.model";
 import {Router} from "@angular/router";
 import {GameState} from "../../modules/game/enums/game-state.enum";
+import {Card} from "../../shared/models/card.model";
 
 
 @Injectable({
@@ -124,6 +125,27 @@ export class DatabaseService {
             let docRef = doc(this.firestore, "sessions", sessionId, "players", playerId)
             return await updateDoc(docRef, {isActive: false})
         }
+
+    }
+
+    updatePlayerCardValue(card: Card) {
+        if (!this.stateService.playerConnected) {
+            throw new Error("No player connected")
+        }
+        let player = this.stateService.playerConnected
+        let docRef = doc(this.firestore, "sessions", this.router.url, "players", player.id!)
+        if (player.card.value == card.value) {
+            return updateDoc(docRef , {
+                card : {
+                    value : null
+                }
+            })
+        }
+        return updateDoc(docRef , {
+            card : {
+                value : card.value
+            }
+        })
 
     }
 }

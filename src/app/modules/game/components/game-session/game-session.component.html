@@ -33,7 +33,7 @@
     <div class="container-cards-picker flexC centered">
         <h3>Pick a card</h3>
         <div class="cards-picker flexR centered spaceA wrapped">
-            <app-card *ngFor="let card of votingCards" [card]="card"></app-card>
+            <app-card *ngFor="let card of votingCards" [card]="card"  (click)="toggleCard(card)" ></app-card>
         </div>
     </div>
 </main>
